@@ -37,7 +37,7 @@ ggplot(importsLong, aes(Year, as.numeric(as.character(MetricTons)), group = 1)) 
   labs(x= "Year", y = "Metric Tons", title = "US Commercial Seafood Landings 1950-2020")
 #------
 consumpLong <- read.csv("/Users/rishigurjar/Desktop/aquaresearchFinal/percapconsumption.csv")
-view(consumpLong)
+#view(consumpLong)
 ggplot(consumpLong) +
   geom_path(aes(x = Year, y = Val, color = Type)) +
   facet_grid(Type ~ ., scales = "free_y", 
@@ -74,7 +74,7 @@ ggplot(aquaCap, aes(x=TIME, y=PerCapita, color=LOCATION)) +
   scale_color_hue("Countries", labels = c("China", "Indonesia", "Thailand", "United States", "Vietnam"))
 #---------
 discards <- read.csv("/Users/rishigurjar/Desktop/aquaresearchFinal/discards.csv")
-view(discards)
+#view(discards)
 
 ggplot(discards, aes(x=Year, y=Discards, color=Code)) + 
   geom_line(size = 1)+
@@ -84,7 +84,7 @@ ggplot(discards, aes(x=Year, y=Discards, color=Code)) +
         subtitle ="Discards are animals thrown back (alive or dead) into the sea after being caught during fishing activities.")
 
 clean_discards <- filter(discards, Year >=1960)
-view(clean_discards)
+#view(clean_discards)
 ggplot(clean_discards, aes(x=Year, y=PerCap, color=Code)) + 
   geom_line(size = 1)+
   labs( x = "Time (yrs)",
@@ -92,6 +92,24 @@ ggplot(clean_discards, aes(x=Year, y=PerCap, color=Code)) +
         title ="Fish Discards Per Capita By Country (1960-2018)",
         subtitle ="Discards are animals thrown back (alive or dead) into the sea after being caught during fishing activities.")+
   scale_color_discrete(name = "Country", labels = c("China", "Great Britain", "Indonesia", "India", "United States", "Vietnam"))
+
+ggplot(clean_discards, aes(x=Year, y=DiscardsOverCap, color=Code)) + 
+  geom_line(size = 1)+
+  labs( x = "Time (yrs)",
+        y = "Volume (tonnes)",
+        title ="Fish Discards/Capture Fishery Produced-Fish By Country (1960-2018)",
+        subtitle ="Discards are animals thrown back (alive or dead) into the sea after being caught during fishing activities.")+
+  scale_color_discrete(name = "Country", labels = c("China", "Great Britain", "Indonesia", "India", "United States", "Vietnam"))
+
+#Per Capita Version of above plot
+ggplot(clean_discards, aes(x=Year, y=PerCapDiscardsOverCapturedFish, color=Code)) + 
+  geom_line(size = 1)+
+  labs( x = "Time (yrs)",
+        y = "Volume (tonnes)",
+        title ="Fish Discards/Capture Fishery Produced-Fish By Country Per Capita (1960-2018)",
+        subtitle ="Discards are animals thrown back (alive or dead) into the sea after being caught during fishing activities.")+
+  scale_color_discrete(name = "Country", labels = c("China", "Great Britain", "Indonesia", "India", "United States", "Vietnam"))
+
 
 #---------
 captureprod <- read.csv("/Users/rishigurjar/Desktop/aquaresearchFinal/API_ER.FSH.CAPT.MT_DS2_en_csv_v2_3692271.csv")
