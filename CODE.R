@@ -3,6 +3,10 @@ library(ggplot2)
 library(tidyr)
 library(dplyr)
 library(viridis)
+
+#TEST EDIT 
+library(viridis)
+
 #datvis: https://ourcodingclub.github.io/tutorials/dataviz-beautification/
 
 datWide <- read.csv("/Users/rishigurjar/Desktop/aquaresearchFinal/Data_Extract_From_World_Development_Indicators/8cc86dd2-5b26-46aa-acb9-c83e00c3a923_Data.csv")
