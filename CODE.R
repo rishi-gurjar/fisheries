@@ -3,9 +3,7 @@ library(ggplot2)
 library(tidyr)
 library(dplyr)
 library(viridis)
-
-#TEST EDIT 
-library(viridis)
+library(cowplot)
 
 #datvis: https://ourcodingclub.github.io/tutorials/dataviz-beautification/
 
@@ -78,12 +76,12 @@ ggplot(consumpLong, aes(x = Year))+
   scale_y_continuous(
     name = "Population (in millions)",
     sec.axis = sec_axis(trans=~./coeff, name = "Pounds (lbs)")) + 
-#    labs(title = "US Population Growth and Annual Consumption of Seafood Products & Red Meat Per Capita (1910-2019)")+
+labs(title = "US Population Growth and Annual Consumption of Seafood Products & Red Meat Per Capita (1910-2019)")+
   theme(
-    axis.title.y = element_text(color = "blue", size=25),
+    axis.title.y = element_text(color = "blue", size=15),
     axis.title.y.right = element_text(color = "red", size=0),
-    axis.text.x=element_text(size=20),
-    axis.text.y=element_text(size=20),
+    axis.text.x=element_text(size=10),
+    axis.text.y=element_text(size=10),
     axis.title.x = element_blank())
 
 coeff2 <- 2
@@ -92,17 +90,16 @@ ggplot(consumpLong, aes(x = Year))+
   geom_line(aes(y = TotalRedMeatConsumpPounds*coeff2), size = 1, color = "red")+
   scale_y_continuous(
     name = "Population (in millions)",
-    sec.axis = sec_axis(trans=~./coeff2, name = "Pounds (lbs)")) + 
   theme(
 #    axis.title.y = element_text(color = "blue", size=10),
     axis.title.y.right = element_text(color = "red", size=25),
     axis.text.x=element_text(size=20),
     axis.text.y=element_text(size=20),
     axis.title.x = element_blank(),
-    axis.title.y = element_blank())
+    axis.title.y = element_blank()))
 
 #---------
-aquaCap <- read.csv("/Users/rishigurjar/Desktop/SeafoodResearch/oced_aquacultureprodmod1.csv")
+aquaCap <- read.csv("/Users/rishigurjar/Desktop/aquaresearchFinal/FoodResearch/SeafoodResearch/oced_aquacultureprodmod1.csv")
 view(aquaCap)
 
 #cap <- read.csv("/Users/rishigurjar/Desktop/aquaresearchFINAL/cap.csv")
@@ -119,14 +116,27 @@ library(plyr)
 
 names <- c('AQUAPROD' = "Aquaculture Production", 'CAPNLD' = "Capture Fishery Landings")
 
-ggplot(aquaCap, aes(x=TIME, y=log10(Value), linetype=INDICATOR, color=LOCATION)) + 
+p1 <- ggplot(aquaCap, aes(x=TIME, y=PerCapita, linetype=INDICATOR, color=LOCATION)) + 
   geom_line(size = 1)+
-  labs( x = "Time (yrs)",
+  labs( x = "Year",
         y = "log Volume (tonnes)",
-        title ="Aquaculture Production and Domestic Capture Fishery Landings of Select Countries (1995-2019)") + 
-  scale_color_hue("Country", labels = c("China", "Indonesia", "Thailand", "United States", "Vietnam")) +
-  theme_minimal() +
-  scale_y_continuous(labels = scales::label_number(scale_cut = scales::cut_short_scale()),)
+        title ="Total") + 
+  theme(legend.position = "none")
+
+p2 <- ggplot(aquaCap, aes(x=TIME, y=log10(Value), linetype=INDICATOR, color=LOCATION)) + 
+  geom_line(size = 1)+
+  labs( x = "Year",
+        y = "Volume (tonnes)",
+        title ="Per Capita") + 
+  scale_color_hue("Country", labels = c("China", "Indonesia", "Thailand", "United States", "Vietnam"))+
+  labs(
+    linetype = ""
+  )
+p <- plot_grid(p1, p2, labels = c('a', 'b'), label_size = 15)
+title <- ggdraw() + draw_label("Domestic Aquaculture Production and Capture Fishery Landings of Select Countries (1995-2019)")
+plot_grid(title, p, ncol=1, rel_heights=c(0.1, 1)) # rel_heights values control title margins
+
+
 #facet_grid(INDICATOR ~ ., scales = "free_y", labeller = as_labeller(names)) 
 
 
@@ -201,8 +211,9 @@ ggplot(disv3) +
 fishing activities.",
       fill = "Type") +
  theme_minimal() +
-  scale_fill_discrete(labels=c('Discards', 'Landings'))+
- _wrap(vars(Entity))
+  scale_fill_manual(values=c('#3a4e68', '#b1cd69'), labels=c('Discards', 'Landings')) +
+  theme(legend.title=element_blank())+
+ facet_wrap(vars(Entity))
 
 
 #Per Capita Version of above plot
